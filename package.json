@@ -1,0 +1,31 @@
+{
+  "name": "@voliware/node-build",
+  "version": "1.0.0",
+  "description": "JS and CSS minifier for @voliware/node-based products",
+  "main": "index.js",
+  "dependencies": {
+    "clean-css": "^4.2.1",
+    "uglify-es": "^3.3.9"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Voliware/node-build.git"
+  },
+  "keywords": [
+    "build",
+    "minify",
+    "voliware"
+  ],
+  "author": "Anthony Agostino",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Voliware/node-build/issues"
+  },
+  "homepage": "https://github.com/Voliware/node-build#readme"
+}
