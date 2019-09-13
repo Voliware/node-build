@@ -1,6 +1,6 @@
 {
   "name": "@voliware/node-build",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "JS and CSS minifier for @voliware/node-based products",
   "main": "index.js",
   "dependencies": {
