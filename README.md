@@ -43,6 +43,7 @@ const jsBaseConfig = {
 
 // library bundle
 const jsBundleInput = [
+    './src/js/library.js',
     './src/js/plugin1.js',
     './src/js/plugin2.js'
 ];
