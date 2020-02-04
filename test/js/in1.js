@@ -1,1 +1,3 @@
-const a = 1;
+async function bar(parameter){
+    await foo(parameter);
+}
