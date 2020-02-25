@@ -1,7 +1,7 @@
 const Fs = require('fs');
 const Path = require('path');
 const Assert = require('assert');
-const Builder = require('./../index');
+const {Build} = require('./../index');
 
 /**
  * Delete all test files
@@ -37,7 +37,7 @@ const jsconfig = {
 };
 
 it('minifies JS files', async () => {
-    let builder = new Builder.JsBuilder(jsconfig);
+    let builder = new Build(jsconfig, {logger: false});
     await builder.run();
     let result = Fs.readFileSync(jsfileout).toString();
     Assert.strictEqual(result, jsoutput);
@@ -58,7 +58,7 @@ const cssconfig = {
 };
 
 it('minifies CSS files', async () => {
-    let builder = new Builder.CssBuilder(cssconfig);
+    let builder = new Build(cssconfig, {logger: false});
     await builder.run();
     let result = Fs.readFileSync(cssfileout).toString();
     Assert.strictEqual(result, cssoutput);
@@ -92,7 +92,7 @@ const htmlconfig = {
 };
 
 it('builds HTML files', async () => {
-    let builder = new Builder.HtmlBuilder(htmlconfig);
+    let builder = new Build(htmlconfig, {logger: false});
     await builder.run();
     let result = Fs.readFileSync(htmlfileout).toString();
     Assert.strictEqual(result, htmloutput);
@@ -101,7 +101,7 @@ it('builds HTML files', async () => {
 it('minifies JS and CSS and builds HTML from a config', async () => { 
     deleteFiles();
     let configs = [jsconfig, cssconfig, htmlconfig];
-    let build = new Builder.Build(configs, false);
+    let build = new Build(configs, {logger: false});
     await build.run();
 
     let jsresult = Fs.readFileSync(jsfileout).toString();
