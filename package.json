@@ -4,8 +4,8 @@
   "description": "JS and CSS minifier for @voliware/node-based products",
   "main": "index.js",
   "dependencies": {
-    "@voliware/node-data-transform": "*",
-    "@voliware/node-minify-transform": "*"
+    "@voliware/node-data-transform": "^0.3.0",
+    "@voliware/node-minify-transform": "^0.1.1"
   },
   "devDependencies": {
     "mocha": "^6.2.2"

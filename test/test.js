@@ -25,7 +25,7 @@ deleteFiles();
 const jsfile1 = "./test/js/in1.js";
 const jsfile2 = "./test/js/in2.js";
 const jsfileout = "./test/js/out.min.js";
-const jsoutput = "async function bar(a){await foo(a)}class Foo{bar(){let a={a:1,b:{}};return a.b.a=1,a}}";
+const jsoutput = `async function bar(a){await foo(a)}class Foo{bar(){let a={a:1,b:{}};return a.b.a=1,a}}`;
 const jsconfig = {
     name: 'JS Test',
     version: '1.0.0',
