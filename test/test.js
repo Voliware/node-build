@@ -1,7 +1,7 @@
 const Fs = require('fs');
 const Path = require('path');
 const Assert = require('assert');
-const {Build} = require('./../index');
+const {Build, Modifier} = require('./../index');
 
 /**
  * Delete all test files
@@ -79,16 +79,12 @@ const htmlconfig = {
     output: htmlfileout,
     minify: true,
     gzip: true,
-    modifiers: {
-        // replace matches with contents
-        replace: [{match: 'div', contents: {string: 'span'}}],
-        // append contents after match
-        append: [{match: '<!-- templates -->', contents: {file: htmlfileappend}}],
-        // erase all matches
-        erase: [{match: '<head></head>'}],
-        // prepend contents before match
-        prepend: [{match: '<!-- scripts -->', contents: {file: htmlfileprepend}}],
-    }
+    modifiers: [
+        new Modifier('replace', 'div', {string: 'span'}),
+        new Modifier('append', '<!-- templates -->', {file: htmlfileappend}),
+        new Modifier('erase', '<head></head>'),
+        new Modifier('prepend', '<!-- scripts -->', {file: htmlfileprepend}),
+    ]
 };
 
 it('builds HTML files', async () => {
