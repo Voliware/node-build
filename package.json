@@ -1,10 +1,10 @@
 {
   "name": "@voliware/node-build",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "JS CSS, and HTML minifier and builder for @voliware/node-based products",
   "main": "index.js",
   "dependencies": {
-    "@voliware/node-data-transform": "^1.0.0",
+    "@voliware/node-data-transform": "^1.1.0",
     "@voliware/node-minify-transform": "^0.1.1"
   },
   "devDependencies": {
