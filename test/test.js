@@ -1,7 +1,7 @@
 const Fs = require('fs');
 const Path = require('path');
 const Assert = require('assert');
-const {Build, Modifier} = require('./../index');
+const {Build, FileCopier, FileMover, Modifier} = require('./../index');
 
 /**
  * Delete all test files
@@ -106,4 +106,106 @@ it('minifies JS and CSS and builds HTML from a config', async () => {
     Assert.strictEqual(cssresult, cssoutput);
     let result = Fs.readFileSync(htmlfileout).toString();
     Assert.strictEqual(result, htmloutput);
+});
+
+it('move a file', async () => {
+    // Delete old test file
+    try {
+        Fs.unlinkSync('./test/moved/movefile1.txt');
+    }
+    catch(error){
+        // No file
+    }
+    // Create a new file
+    let input = Path.join(__dirname, 'movefile1.txt');
+    Fs.writeFileSync(input, 'Some data');
+    let output = Path.join(__dirname, './moved');
+    let builder = new FileMover({input, output, logger: false});
+    await builder.run();
+    let newpath = Path.join(output, 'movefile1.txt');
+    let result = Fs.readFileSync(newpath).toString();
+    Assert.strictEqual(result, 'Some data');
+});
+
+it('moves files', async () => {
+    // Delete old test files
+    try {
+        Fs.unlinkSync('./test/moved/movefile1.txt');
+        Fs.unlinkSync('./test/moved/movefile2.txt');
+    }
+    catch(error){
+        // No files
+    }
+    // Create a new files
+    let input1 = Path.join(__dirname, 'movefile1.txt');
+    let input2 = Path.join(__dirname, 'movefile2.txt');
+    Fs.writeFileSync(input1, 'Some data');
+    Fs.writeFileSync(input2, 'More data');
+    let output = Path.join(__dirname, './moved');
+    let builder = new FileMover({input: [input1, input2], output, logger: false});
+    await builder.run();
+    let newpath1 = Path.join(output, 'movefile1.txt');
+    let newpath2 = Path.join(output, 'movefile2.txt');
+    let result = Fs.readFileSync(newpath1).toString();
+    result += Fs.readFileSync(newpath2).toString();
+    Assert.strictEqual(result, 'Some dataMore data');
+});
+
+it('copy a file', async () => {
+    // Delete old test file
+    try {
+        Fs.unlinkSync('./test/copied/copiedfile1.txt');
+    }
+    catch(error){
+        // No file
+    }
+    // Create a new file
+    let input = Path.join(__dirname, 'copiedfile1.txt');
+    Fs.writeFileSync(input, 'Some data');
+    let output = Path.join(__dirname, './copied');
+    let builder = new FileCopier({input, output, logger: false});
+    await builder.run();
+    let newpath = Path.join(output, 'copiedfile1.txt');
+    let result = Fs.readFileSync(newpath).toString();
+    // Delete test file
+    try {
+        Fs.unlinkSync('./test/copiedfile1.txt');
+    }
+    catch(error){
+        // No file
+    }
+    Assert.strictEqual(result, 'Some data');
+});
+
+it('copy files', async () => {
+    // Delete old test files
+    try {
+        Fs.unlinkSync('./test/copied/copiedfile1.txt');
+        Fs.unlinkSync('./test/copied/copiedfile2.txt');
+    }
+    catch(error){
+        // No file
+    }
+    // Create new files
+    let input1 = Path.join(__dirname, 'copiedfile1.txt');
+    let input2 = Path.join(__dirname, 'copiedfile2.txt');
+    Fs.writeFileSync(input1, 'Some data');
+    Fs.writeFileSync(input2, 'More data');
+    let output = Path.join(__dirname, './copied');
+    let builder = new FileCopier({input: [input1, input2], output, logger: false});
+    await builder.run();
+    let newpath1 = Path.join(output, 'copiedfile1.txt');
+    let newpath2 = Path.join(output, 'copiedfile2.txt');
+    let result = Fs.readFileSync(newpath1).toString();
+    result += Fs.readFileSync(newpath2).toString();
+    Assert.strictEqual(result, 'Some dataMore data');
+    // Delete test files
+    try {
+        Fs.unlinkSync('./test/copiedfile1.txt');
+        Fs.unlinkSync('./test/copiedfile2.txt');
+    }
+    catch(error){
+        // No file
+    }
+    Assert.strictEqual(result, 'Some dataMore data');
 });
