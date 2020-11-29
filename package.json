@@ -1,11 +1,12 @@
 {
   "name": "@voliware/node-build",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "JS CSS, and HTML minifier and builder for @voliware/node-based products",
   "main": "index.js",
   "dependencies": {
-    "@voliware/node-data-transform": "^1.2.0",
-    "@voliware/node-minify-transform": "^0.1.1"
+    "@voliware/node-data-transform": "^1.2.1",
+    "@voliware/node-minify-transform": "^0.1.1",
+    "glob": "^7.1.6"
   },
   "devDependencies": {
     "mocha": "^6.2.3"

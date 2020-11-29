@@ -19,8 +19,11 @@ function deleteFiles(){
         
     }
 }
-
 deleteFiles();
+
+/******************************************************************************
+ * JS
+ *****************************************************************************/
 
 const jsfile1 = "./test/js/in1.js";
 const jsfile2 = "./test/js/in2.js";
@@ -43,6 +46,10 @@ it('minifies JS files', async () => {
     Assert.strictEqual(result, jsoutput);
 });
 
+/******************************************************************************
+ * CSS
+ *****************************************************************************/
+
 const cssfile1 = "./test/css/in1.css";
 const cssfile2 = "./test/css/in2.css";
 const cssfileout = "./test/css/out.min.css";
@@ -63,6 +70,10 @@ it('minifies CSS files', async () => {
     let result = Fs.readFileSync(cssfileout).toString();
     Assert.strictEqual(result, cssoutput);
 });
+
+/******************************************************************************
+ * HTML
+ *****************************************************************************/
 
 const htmlstart = Path.join(__dirname, "/html/start.html");
 const htmlcontent = Path.join(__dirname, "/html/content.html");
@@ -94,6 +105,10 @@ it('builds HTML files', async () => {
     Assert.strictEqual(result, htmloutput);
 });
 
+/******************************************************************************
+ * JS, CSS, HTML
+ *****************************************************************************/
+
 it('minifies JS and CSS and builds HTML from a config', async () => { 
     deleteFiles();
     let configs = [jsconfig, cssconfig, htmlconfig];
@@ -107,6 +122,10 @@ it('minifies JS and CSS and builds HTML from a config', async () => {
     let result = Fs.readFileSync(htmlfileout).toString();
     Assert.strictEqual(result, htmloutput);
 });
+
+/******************************************************************************
+ * Move file
+ *****************************************************************************/
 
 it('move a file', async () => {
     // Delete old test file
@@ -127,11 +146,17 @@ it('move a file', async () => {
     Assert.strictEqual(result, 'Some data');
 });
 
+/******************************************************************************
+ * Move files
+ *****************************************************************************/
+
 it('moves files', async () => {
     // Delete old test files
     try {
         Fs.unlinkSync('./test/moved/movefile1.txt');
         Fs.unlinkSync('./test/moved/movefile2.txt');
+        Fs.unlinkSync('./test/moved/movefile3.rtf');
+        Fs.unlinkSync('./test/moved/movefile4.rtf');
     }
     catch(error){
         // No files
@@ -139,17 +164,30 @@ it('moves files', async () => {
     // Create a new files
     let input1 = Path.join(__dirname, 'movefile1.txt');
     let input2 = Path.join(__dirname, 'movefile2.txt');
+    let input3 = Path.join(__dirname, 'movefile3.rtf');
+    let input4 = Path.join(__dirname, 'movefile4.rtf');
     Fs.writeFileSync(input1, 'Some data');
     Fs.writeFileSync(input2, 'More data');
+    Fs.writeFileSync(input3, 'abc');
+    Fs.writeFileSync(input4, '123');
     let output = Path.join(__dirname, './moved');
-    let builder = new FileMover({input: [input1, input2], output, logger: false});
+    let rtf_files = Path.join(__dirname, "*.rtf");
+    let builder = new FileMover({input: [input1, input2, rtf_files], output, logger: false});
     await builder.run();
     let newpath1 = Path.join(output, 'movefile1.txt');
     let newpath2 = Path.join(output, 'movefile2.txt');
+    let newpath3 = Path.join(output, 'movefile3.rtf');
+    let newpath4 = Path.join(output, 'movefile4.rtf');
     let result = Fs.readFileSync(newpath1).toString();
     result += Fs.readFileSync(newpath2).toString();
-    Assert.strictEqual(result, 'Some dataMore data');
+    result += Fs.readFileSync(newpath3).toString();
+    result += Fs.readFileSync(newpath4).toString();
+    Assert.strictEqual(result, 'Some dataMore dataabc123');
 });
+
+/******************************************************************************
+ * Cyop file
+ *****************************************************************************/
 
 it('copy a file', async () => {
     // Delete old test file
@@ -167,6 +205,7 @@ it('copy a file', async () => {
     await builder.run();
     let newpath = Path.join(output, 'copiedfile1.txt');
     let result = Fs.readFileSync(newpath).toString();
+    Assert.strictEqual(result, 'Some data');
     // Delete test file
     try {
         Fs.unlinkSync('./test/copiedfile1.txt');
@@ -174,14 +213,19 @@ it('copy a file', async () => {
     catch(error){
         // No file
     }
-    Assert.strictEqual(result, 'Some data');
 });
+
+/******************************************************************************
+ * Copy files
+ *****************************************************************************/
 
 it('copy files', async () => {
     // Delete old test files
     try {
         Fs.unlinkSync('./test/copied/copiedfile1.txt');
         Fs.unlinkSync('./test/copied/copiedfile2.txt');
+        Fs.unlinkSync('./test/copied/copiedfile3.rtf');
+        Fs.unlinkSync('./test/copied/copiedfile4.rtf');
     }
     catch(error){
         // No file
@@ -189,23 +233,33 @@ it('copy files', async () => {
     // Create new files
     let input1 = Path.join(__dirname, 'copiedfile1.txt');
     let input2 = Path.join(__dirname, 'copiedfile2.txt');
+    let input3 = Path.join(__dirname, 'copiedfile3.rtf');
+    let input4 = Path.join(__dirname, 'copiedfile4.rtf');
     Fs.writeFileSync(input1, 'Some data');
     Fs.writeFileSync(input2, 'More data');
+    Fs.writeFileSync(input3, 'abc');
+    Fs.writeFileSync(input4, '123');
     let output = Path.join(__dirname, './copied');
-    let builder = new FileCopier({input: [input1, input2], output, logger: false});
+    let rtf_files = Path.join(__dirname, "*.rtf");
+    let builder = new FileCopier({input: [input1, input2, rtf_files], output, logger: false});
     await builder.run();
     let newpath1 = Path.join(output, 'copiedfile1.txt');
     let newpath2 = Path.join(output, 'copiedfile2.txt');
+    let newpath3 = Path.join(output, 'copiedfile3.rtf');
+    let newpath4 = Path.join(output, 'copiedfile4.rtf');
     let result = Fs.readFileSync(newpath1).toString();
     result += Fs.readFileSync(newpath2).toString();
-    Assert.strictEqual(result, 'Some dataMore data');
+    result += Fs.readFileSync(newpath3).toString();
+    result += Fs.readFileSync(newpath4).toString();
+    Assert.strictEqual(result, 'Some dataMore dataabc123');
     // Delete test files
     try {
         Fs.unlinkSync('./test/copiedfile1.txt');
         Fs.unlinkSync('./test/copiedfile2.txt');
+        Fs.unlinkSync('./test/copiedfile3.rtf');
+        Fs.unlinkSync('./test/copiedfile4.rtf');
     }
     catch(error){
         // No file
     }
-    Assert.strictEqual(result, 'Some dataMore data');
 });
